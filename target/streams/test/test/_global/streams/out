@@ -1,0 +1,10 @@
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(model.TreeSpec, org.scalacheck.ScalaCheckFramework$$anon$5@beb3021, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(model.TraverseSpec, org.scalacheck.ScalaCheckFramework$$anon$5@beb3021, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(model.TraverseSpec-0, org.scalacheck.ScalaCheckFramework$$anon$5@beb3021, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(model.TreeSpec-0, org.scalacheck.ScalaCheckFramework$$anon$5@beb3021, false, [SuiteSelector])[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m+ Tree.map: OK, passed 100 tests.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m+ Traverse.compose and map: OK, passed 100 tests.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0mPassed: Total 2, Failed 0, Errors 0, Passed 2[0m
+[0m[[0m[0mdebug[0m] [0m[0mPassed tests:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	model.TreeSpec[0m
+[0m[[0m[0mdebug[0m] [0m[0m	model.TraverseSpec[0m
