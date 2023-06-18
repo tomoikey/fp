@@ -1,9 +1,0 @@
-[0m[[0m[33mwarn[0m] [0m[0m[33m[33m-- Warning: /Users/tomokisomeya/develop/private-bussiness/fp/src/main/scala/model/Traverse.scala:42:21 [0m[0m[0m
-[0m[[0m[33mwarn[0m] [0m[0m[33m42 |[0m      head :: tail = state[0m
-[0m[[0m[33mwarn[0m] [0m[0m[33m[33m   |[0m                     ^^^^^[0m[0m
-[0m[[0m[33mwarn[0m] [0m[0m[33m   |[0mpattern's type ::[A] is more specialized than the right hand side expression's type List[A][0m
-[0m[[0m[33mwarn[0m] [0m[0m[33m   |[0m[0m
-[0m[[0m[33mwarn[0m] [0m[0m[33m   |[0mIf the narrowing is intentional, this can be communicated by adding `: @unchecked` after the expression,[0m
-[0m[[0m[33mwarn[0m] [0m[0m[33m   |[0mwhich may result in a MatchError at runtime.[0m
-[0m[[0m[33mwarn[0m] [0m[0m[33m   |[0mThis patch can be rewritten automatically under -rewrite -source 3.2-migration.[0m
-[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m
