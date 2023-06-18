@@ -1,5 +1,7 @@
 package model
 
+import scala.collection.immutable.LazyList
+
 trait Applicative[F[_]] extends Functor[F] { self =>
   def unit[A](a: => A): F[A]
 
@@ -93,4 +95,12 @@ object Applicative {
     new Applicative[({ type f[x] = Map[K, x] })#f] {
       override def unit[A](a: => A): Map[K, A] = Map()
     }
+
+  val streamApplicative: Applicative[LazyList] = new Applicative[LazyList] {
+    override def unit[A](a: => A): LazyList[A] = LazyList.continually(a)
+
+    override def apply[A, B](fab: LazyList[A => B])(
+        fa: LazyList[A]
+    ): LazyList[B] = fa.zip(fab).map { case (a, ab) => ab(a) }
+  }
 }
