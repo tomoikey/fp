@@ -1,5 +1,7 @@
 package model
 
+import model.Free.*
+
 import scala.annotation.tailrec
 
 // Monad則
@@ -83,56 +85,38 @@ object Monad {
       buf.result()
     }
   }
-  val optionMonad = new Monad[Option] {
+  val optionMonad: Monad[Option] = new Monad[Option]
+    with StackSafeMonad[Option] {
     override def unit[A](a: => A): Option[A] = Some(a)
 
     override def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
       fa.flatMap(f)
-
-    @tailrec
-    override def tailRecM[A, B](a: A)(f: A => Option[Either[A, B]]): Option[B] =
-      f(a) match
-        case None               => None
-        case Some(Right(value)) => Some(value)
-        case Some(Left(value))  => tailRecM(value)(f)
   }
 
-  def eitherMonad[E]: Monad[
-    ({
-      type f[x] = Either[E, x]
-    })#f
-  ] = new Monad[({ type f[x] = Either[E, x] })#f] {
-    override def unit[A](a: => A): Either[E, A] = Right(a)
+  def eitherMonad[E]: Monad[[x] =>> Either[E, x]] =
+    new Monad[[x] =>> Either[E, x]] with StackSafeMonad[[x] =>> Either[E, x]] {
+      override def unit[A](a: => A): Either[E, A] = Right(a)
 
-    override def flatMap[A, B](fa: Either[E, A])(
-        f: A => Either[E, B]
-    ): Either[E, B] = fa.flatMap(f)
-
-    @tailrec
-    override def tailRecM[A, B](a: A)(
-        f: A => Either[E, Either[A, B]]
-    ): Either[E, B] = f(a) match
-      case Right(Right(value)) => Right(value)
-      case Right(Left(value))  => tailRecM(value)(f)
-      case Left(value)         => Left(value)
-  }
-
-  def stateMonad[S]: Monad[({ type f[x] = State[S, x] })#f] = new Monad[
-    ({
-      type f[x] = State[S, x]
-    })#f
-  ] {
-    override def flatMap[A, B](fa: State[S, A])(
-        f: A => State[S, B]
-    ): State[S, B] = fa.flatMap(f)
-
-    override def unit[A](a: => A): State[S, A] = State.unit(a)
-
-    override def tailRecM[A, B](a: A)(
-        f: A => State[S, Either[A, B]]
-    ): State[S, B] = f(a).flatMap {
-      case Right(value) => unit(value)
-      case Left(value)  => tailRecM(value)(f)
+      override def flatMap[A, B](fa: Either[E, A])(
+          f: A => Either[E, B]
+      ): Either[E, B] = fa.flatMap(f)
     }
-  }
+
+  def stateMonad[S]: Monad[({ type f[x] = State[S, x] })#f] =
+    new Monad[[x] =>> State[S, x]] with StackSafeMonad[[x] =>> State[S, x]] {
+      override def flatMap[A, B](fa: State[S, A])(
+          f: A => State[S, B]
+      ): State[S, B] = fa.flatMap(f)
+
+      override def unit[A](a: => A): State[S, A] = State.unit(a)
+    }
+
+  implicit def freeMonad[F[_]: Functor]: Monad[[x] =>> Free[F, x]] =
+    new Monad[[x] =>> Free[F, x]] with StackSafeMonad[[x] =>> Free[F, x]] {
+      override def flatMap[A, B](fa: Free[F, A])(
+          f: A => Free[F, B]
+      ): Free[F, B] =
+        fa.flatMap(f)
+      override def unit[A](a: => A): Free[F, A] = Free.pure(a)
+    }
 }
